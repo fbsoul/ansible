@@ -7,7 +7,15 @@
 #   - Groups of hosts are delimited by [header] elements
 #   - You can enter hostnames or ip addresses
 #   - A hostname/ip can be a member of multiple groups
-vm1
+
+
+# added by Vinny,: to eliminate ssh to control server(on it) which is vm1
+ [control]
+vm1 ansible_connection=local
+
+
+
+
 # Ex 1: Ungrouped hosts, specify before any group headers.
 
 ## green.example.com
