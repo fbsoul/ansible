@@ -1,0 +1,13 @@
+---
+- name: Install httpd, MySQL, Nginx
+  hosts: vm1
+  remote_user: root
+  # remote_user: user
+  # become: true
+  # become_method: sudo
+  
+  roles:
+    - commons
+    - nginx
+    - httpd
+                          

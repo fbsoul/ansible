@@ -1,0 +1,12 @@
+---
+- name: Install libselinux-python
+  yum: name=libselinux-python state=present
+
+- name: Copy the file to /tmp/file 
+  copy: src=file1 dest=/tmp/file1
+
+
+- name: add html content 
+  copy: src=index.html dest=/var/www/html/index.html 
+  notify: restart httpd
+
