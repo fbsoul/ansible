@@ -1,0 +1,5 @@
+# /etc/ansible/createusers/hosts
+  [webservers]
+  vm1
+  vm2
+  ansible-vm3

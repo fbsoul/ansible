@@ -1,0 +1,30 @@
+---
+# /etc/ansible/createusers/create_users.yml
+- name: Provision standard Linux user accounts
+  hosts: webservers
+  become: true
+  vars:
+    username: "samk"
+    real_name: "sam kodari"
+
+  tasks:
+    - name: Ensure the user group exists
+      ansible.builtin.group:
+        name: "{{ username }}"
+        state: present
+
+    - name: Create the user account
+      ansible.builtin.user:
+        name: "{{ username }}"
+        comment: "{{ real_name }}"
+        group: "{{ username }}"
+        groups: wheel
+        append: true
+        shell: /bin/bash
+        state: present
+
+    - name: Set up authorized SSH key for the user
+      ansible.posix.authorized_key:
+        user: "{{ username }}"
+        state: present
+        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK..."
