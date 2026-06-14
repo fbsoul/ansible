@@ -1,0 +1,40 @@
+---
+- hosts: loadbalancer
+  become: true
+  tasks:
+    - name: Stop Nginx load balancer
+      ansible.builtin.service:
+        name: nginx
+        state: stopped
+
+- hosts: webservers
+  become: true
+  tasks:
+    - name: Stop Apache web servers
+      ansible.builtin.service:
+        name: httpd
+        state: stopped
+
+- hosts: db
+  become: true
+  tasks:
+    - name: Restart MySQL database
+      ansible.builtin.service:
+        name: mysqld
+        state: restarted
+
+- hosts: webservers
+  become: true
+  tasks:
+    - name: Start Apache web servers
+      ansible.builtin.service:
+        name: httpd
+        state: started
+
+- hosts: loadbalancer
+  become: true
+  tasks:
+    - name: Start Nginx load balancer
+      ansible.builtin.service:
+        name: nginx
+        state: started

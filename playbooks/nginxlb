@@ -1,0 +1,13 @@
+---
+
+- hosts: nodes
+  become: true
+  tasks:
+  
+  - name: install nginx webserver and loadbalancer and proxy.
+
+    dnf: name=nginx state=present update_cache=yes
+
+  - name:  ensure enginx started 
+    service: name=nginx state=started  enabled=yes
+

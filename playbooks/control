@@ -1,0 +1,17 @@
+---
+
+- hosts: control
+
+  become: true
+  
+  tasks:
+   - name: install tools on ansible control server.
+   
+     dnf: name={{item}} state=present update_cache=yes
+      
+     with_items:
+     - curl
+     - rsync
+     - tftp
+
+ 

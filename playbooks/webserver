@@ -1,0 +1,13 @@
+---
+
+- hosts: webservers
+  become: true
+  tasks:
+  
+  - name: install webserver httpd
+
+    dnf: name=httpd state=present update_cache=yes
+
+  - name:  ensure webserver is  started 
+    service: name=httpd state=started  enabled=yes
+
