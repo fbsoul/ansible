@@ -1,0 +1,35 @@
+---
+- name: Configure Web Tier
+  hosts: webservers
+  become: true
+
+  tasks:
+    - name: Install Apache
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+
+    - name: Ensure firewalld is running
+      ansible.builtin.systemd:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: Open HTTP port on host firewall
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name: Create custom index page
+      ansible.builtin.copy:
+        content: "<h1>Hello from the Ansible-Managed Web Server!</h1>"
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+    - name: Start Apache
+      ansible.builtin.systemd:
+        name: httpd
+        state: started
+        
