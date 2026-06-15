@@ -1,0 +1,13 @@
+---
+# roles/useradmin/tasks/main.yml
+- name: Ensure standard administration group exists
+  ansible.builtin.group:
+    name: sysops
+    state: present
+
+- name: Create a standard admin user
+  ansible.builtin.user:
+    name: bob
+    group: sysops
+    shell: /bin/bash
+    state: present
