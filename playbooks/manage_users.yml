@@ -2,6 +2,6 @@
 # playbooks/manage_users.yml
 - name: Execute User Administration Tasks
   hosts: all
-  become: yes
+  become: true
   roles:
     - useradmin
