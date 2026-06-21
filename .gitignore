@@ -1,3 +1,9 @@
 *.retry
 playbooks/vscode.rpm
 hosts.old
+ignorefile
+installationdir
+.env
+ignorefile
+ignorefile
+installationdir
