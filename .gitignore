@@ -7,3 +7,6 @@ installationdir
 ignorefile
 ignorefile
 installationdir
+*.pem
+*.key
+id_rsa
