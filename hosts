@@ -8,4 +8,4 @@
 ansible-vm3 ansible_host=192.168.100.7
 
 [control]
-localhost ansible_connection=localhost
+localhost ansible_connection=local
