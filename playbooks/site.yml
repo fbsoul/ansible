@@ -1,0 +1,28 @@
+---
+# playbooks/site.yml
+# Master Infrastructure-as-Code Configuration Management Playbook
+# Architected by: Linux Infrastructure Engineer
+
+- name: Phase 1 - Baseline OS Configuration
+  hosts: all
+  gather_facts: true
+  roles:
+    - os_configuration
+
+- name: Phase 2 - System Performance Optimization
+  hosts: loadbalancer, webservers, db
+  gather_facts: false
+  roles:
+    - performance
+
+- name: Phase 3 - Security Enforcement & Hardening
+  hosts: all
+  gather_facts: false
+  roles:
+    - security
+
+- name: Phase 4 - Identity & Access Administration
+  hosts: all
+  gather_facts: false
+  roles:
+    - useradmin
