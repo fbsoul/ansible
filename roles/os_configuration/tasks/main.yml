@@ -4,5 +4,5 @@
   ansible.builtin.lineinfile:
     path: /etc/resolv.conf
     regexp: '^nameserver'
-    line: 'nameserver 8.8.8.8'
+    line: "nameserver {{ primary_dns_server }}"
     state: present
