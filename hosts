@@ -1,11 +1,11 @@
-[loadbalancer]
-192.168.100.6
+[loadbalancers]
+loadbalancer
 
 [webservers]
-192.168.100.5
+webserver
 
 [db]
-ansible-vm3 ansible_host=192.168.100.7
+dbvm3 ansible_host=192.168.100.7
 
 [control]
 localhost ansible_connection=local
