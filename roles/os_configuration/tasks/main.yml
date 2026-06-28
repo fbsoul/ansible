@@ -1,2 +1,8 @@
 ---
 # tasks file for roles/os_configuration
+- name: Ensure standard corporate DNS servers are configured
+  ansible.builtin.lineinfile:
+    path: /etc/resolv.conf
+    regexp: '^nameserver'
+    line: 'nameserver 8.8.8.8'
+    state: present
