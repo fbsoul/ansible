@@ -1,2 +1,10 @@
 ---
 # defaults file for roles/security
+# Define required enterprise services for our environment
+allowed_services:
+  - ssh          # Port 22 (Centralized Admin Access)
+  - http         # Port 80 (Nginx Load Balancer / Apache Web Servers)
+  - https        # Port 443 (Secure Web Traffic)
+
+allowed_ports:
+  - "3306/tcp"   # Database Tier (Internal Cluster Network)

@@ -1,2 +1,23 @@
 ---
 # tasks file for roles/security
+- name: Ensure firewalld is active and enabled on boot
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Harden Firewall - Enable permitted standard services
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop: "{{ allowed_services }}"
+
+- name: Harden Firewall - Enable permitted custom environment ports
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+    immediate: true
+  loop: "{{ allowed_ports | default([]) }}"
