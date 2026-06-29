@@ -1,3 +1,9 @@
 ---
 # defaults file for roles/os_configuration
 primary_dns_server: "8.8.8.8"
+
+# Group-specific packages for our application tiers
+loadbalancer_packages:
+  - nginx
+webserver_packages:
+  - httpd

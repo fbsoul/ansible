@@ -6,3 +6,29 @@
     regexp: '^nameserver'
     line: "nameserver {{ primary_dns_server }}"
     state: present
+
+- name: Install Nginx on Load Balancer tier
+  ansible.builtin.dnf:
+    name: "{{ loadbalancer_packages }}"
+    state: present
+  when: "'loadbalancers' in group_names"
+
+- name: Install Apache on Web Server tier
+  ansible.builtin.dnf:
+    name: "{{ webserver_packages }}"
+    state: present
+  when: "'webservers' in group_names"
+
+- name: Ensure Nginx is started and enabled on Load Balancer
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+  when: "'loadbalancers' in group_names"
+
+- name: Ensure Apache is started and enabled on Web Servers
+  ansible.builtin.service:
+    name: httpd
+    state: started
+    enabled: true
+  when: "'webservers' in group_names"
