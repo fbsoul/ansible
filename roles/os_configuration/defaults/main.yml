@@ -1,6 +1,6 @@
 ---
 # defaults file for roles/os_configuration
-primary_dns_server: "8.8.8.8"
+primary_dns_server: "8.8.8.8 1.1.1.1"
 
 # Group-specific packages for our application tiers
 loadbalancer_packages:
