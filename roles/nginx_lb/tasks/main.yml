@@ -1,0 +1,13 @@
+---
+- name: Deploy Nginx load balancer configuration
+  ansible.builtin.template:
+    src: nginx_lb.conf.j2
+    dest: /etc/nginx/conf.d/load_balancer.conf
+    mode: '0644'
+  notify: Restart Nginx
+
+- name: Ensure Nginx service is started and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

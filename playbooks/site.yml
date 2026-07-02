@@ -26,3 +26,11 @@
   gather_facts: false
   roles:
     - useradmin
+
+- name: Phase 5 - Configure Load Balancer Tier
+  hosts: loadbalancers
+  become: true
+  roles:
+    - os_configuration
+    - security
+    - nginx_lb
