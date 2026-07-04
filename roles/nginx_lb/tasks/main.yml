@@ -1,4 +1,10 @@
 ---
+- name: Allow Nginx to connect to backend network services (SELinux)
+  ansible.posix.seboolean:
+    name: httpd_can_network_connect
+    state: true
+    persistent: true
+
 - name: Deploy Nginx load balancer configuration
   ansible.builtin.template:
     src: nginx_lb.conf.j2
