@@ -1,5 +1,5 @@
 ---
-nginx_lb_port: 80
+nginx_lb_port: 8080
 nginx_backend_port: 80
 nginx_backend_nodes:
   - name: webserver
