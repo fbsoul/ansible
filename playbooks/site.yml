@@ -6,30 +6,41 @@
 - name: Phase 1 - Baseline OS Configuration
   hosts: all
   gather_facts: true
+  tags:
+    - os-config
   roles:
     - os_configuration
+
 
 - name: Phase 2 - System Performance Optimization
   hosts: loadbalancer, webservers, db
   gather_facts: false
+  tags:
+    - performance
   roles:
     - performance
 
 - name: Phase 3 - Security Enforcement & Hardening
   hosts: all
   gather_facts: false
+  tags:
+    - security
   roles:
     - security
 
 - name: Phase 4 - Identity & Access Administration
   hosts: all
   gather_facts: false
+  tags:
+    - useradmin
   roles:
     - useradmin
 
 - name: Phase 5 - Configure Load Balancer Tier
   hosts: loadbalancers
   become: true
+  tags:
+    - nginx_lb.conf.j2
   roles:
     - os_configuration
     - security
