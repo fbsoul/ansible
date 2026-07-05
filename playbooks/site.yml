@@ -40,7 +40,8 @@
   hosts: loadbalancers
   become: true
   tags:
-    - nginx_lb.conf.j2
+    - lb
+    - proxy
   roles:
     - os_configuration
     - security
