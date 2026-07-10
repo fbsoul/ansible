@@ -1,0 +1,14 @@
+---
+- name: Verify Docker Functionality
+  hosts: docker_hosts
+  become: false
+  tags: [docker-test]
+
+  tasks:
+    - name: Run a test lightweight Alpine container
+      ansible.builtin.command: docker run --rm alpine:latest echo "Hello from inside Docker on our Loadbalancer!"
+      register: docker_output
+
+    - name: Print the output from the container
+      ansible.builtin.debug:
+        msg: "{{ docker_output.stdout }}"

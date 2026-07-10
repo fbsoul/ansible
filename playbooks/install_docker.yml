@@ -1,0 +1,67 @@
+---
+- name: Install Core Docker Engine on Loadbalancer
+  hosts: docker_hosts
+  become: true
+  tags: [docker-only]
+
+  tasks:
+    - name: Clean up old Docker installations if they exist
+      dnf:
+        name:
+          - docker
+          - docker-client
+          - docker-client-latest
+          - docker-common
+          - docker-latest
+          - docker-latest-logrotate
+          - docker-logrotate
+          - docker-engine
+        state: absent
+
+    - name: Install dnf-plugins-core for repository management
+      dnf:
+        name: dnf-plugins-core
+        state: present
+
+    - name: Clean up any broken repo file from previous run
+      ansible.builtin.file:
+        path: /etc/yum.repos.d/docker-ce.repo
+        state: absent
+
+    # Forcing the release version to '9' or '8' bypasses the Rocky releasever bug
+    - name: Add official Docker CE repository with explicit RHEL base
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        mode: '0644'
+
+    - name: Force repo configuration to use stable RHEL paths
+      ansible.builtin.replace:
+        path: /etc/yum.repos.d/docker-ce.repo
+        regexp: '\$releasever'
+        replace: '9'
+
+    - name: Purge DNF cache metadata completely
+      ansible.builtin.command: dnf clean all
+      changed_when: true
+
+    - name: Install core Docker Engine packages
+      dnf:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+        update_cache: true
+
+    - name: Ensure Docker service is started and enabled on boot
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add ansible user to docker group
+      ansible.builtin.user:
+        name: ansible
+        groups: docker
+        append: true
