@@ -1,0 +1,13 @@
+---
+- name: Deploy Persistent Nginx Container
+  hosts: docker_hosts
+  become: false
+  tags: [docker-nginx]
+
+  tasks:
+    - name: Ensure any old test nginx container is removed cleanly
+      ansible.builtin.command: docker rm -f practice_nginx
+      failed_when: false  # Do not crash if the container isn't there yet
+
+    - name: Launch persistent Nginx container mapping port 8080
+      ansible.builtin.command: "docker run -d --name practice_nginx -p 8080:80 --restart unless-stopped nginx:alpine"
