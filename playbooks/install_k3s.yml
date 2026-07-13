@@ -1,0 +1,35 @@
+---
+- name: Configure K3s Control Plane (Master)
+  hosts: control_plane
+  become: true
+  tasks:
+    - name: Download and install K3s Master Node
+      ansible.builtin.shell: |
+        curl -sfL https://get.k3s.io | sh -
+      args:
+        creates: /usr/local/bin/k3s
+
+    - name: Wait for K3s node token file to be generated
+      ansible.builtin.wait_for:
+        path: /var/lib/rancher/k3s/server/node-token
+
+    - name: Fetch the secure node token from Master
+      ansible.builtin.slurp:
+        src: /var/lib/rancher/k3s/server/node-token
+      register: master_token_encoded
+
+    - name: Save token as a global variable factor
+      ansible.builtin.set_fact:
+        k3s_token: "{{ master_token_encoded['content'] | b64decode | trim }}"
+      delegate_to: localhost
+      delegate_facts: true
+
+- name: Configure K3s Worker Nodes
+  hosts: worker_nodes
+  become: true
+  tasks:
+    - name: Download and join Worker Node to the Master Plane
+      ansible.builtin.shell: |
+        curl -sfL https://get.k3s.io | K3S_URL=https://192.168.100.6:6443 K3S_TOKEN="{{ hostvars['localhost']['k3s_token'] }}" sh -
+      args:
+        creates: /usr/local/bin/k3s-agent
