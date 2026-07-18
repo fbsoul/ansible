@@ -3,6 +3,28 @@
   hosts: control_plane
   become: true
   tasks:
+    - name: Ensure firewalld is allowing K3s API traffic
+      ansible.posix.firewalld:
+        port: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true
+      loop:
+        - 6443/tcp
+        - 10250/tcp
+
+    - name: Allow internal cluster pod-to-pod networking traffic
+      ansible.posix.firewalld:
+        zone: trusted
+        interface: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true
+      loop:
+        - flannel.1
+        - cni0
+      failed_when: false
+
     - name: Download and install K3s Master Node
       ansible.builtin.shell: |
         curl -sfL https://get.k3s.io | sh -
@@ -13,23 +35,15 @@
       ansible.builtin.wait_for:
         path: /var/lib/rancher/k3s/server/node-token
 
-    - name: Fetch the secure node token from Master
-      ansible.builtin.slurp:
-        src: /var/lib/rancher/k3s/server/node-token
-      register: master_token_encoded
-
-    - name: Save token as a global variable factor
-      ansible.builtin.set_fact:
-        k3s_token: "{{ master_token_encoded['content'] | b64decode | trim }}"
-      delegate_to: localhost
-      delegate_facts: true
-
-- name: Configure K3s Worker Nodes
+- name: Configure K3s Worker Nodes (Rocky Linux 9.8)
   hosts: worker_nodes
   become: true
+  vars:
+    master_ip: "192.168.100.6"
+    node_token: "K1031ac171fd501346586206cc9fc3703b48c7fa5d1c8940d294f161e8b1cdca777::server:0bd44e08fa15e167df77b24bd8c2999f"
   tasks:
     - name: Download and join Worker Node to the Master Plane
-      ansible.builtin.shell: |
-        curl -sfL https://get.k3s.io | K3S_URL=https://192.168.100.6:6443 K3S_TOKEN="{{ hostvars['localhost']['k3s_token'] }}" sh -
+      ansible.builtin.shell:
+        cmd: curl -sfL https://get.k3s.io | K3S_URL="https://{{ master_ip }}:6443" K3S_TOKEN="{{ node_token }}" sh -
       args:
-        creates: /usr/local/bin/k3s-agent
+        creates: /usr/local/bin/k3s-agent-uninstall.sh
