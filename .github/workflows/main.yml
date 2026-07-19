@@ -29,8 +29,5 @@ jobs:
           context: ./my-web-app
           push: true
           tags: |
-          ghcr.io/${{ github.repository }}/my-web-app:latest
-          ghcr.io/${{ github.repository }}/my-web-app:${{ github.sha }}
-          tags: |
             ghcr.io/${{ github.repository }}/my-web-app:latest
             ghcr.io/${{ github.repository }}/my-web-app:${{ github.sha }}
