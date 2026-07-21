@@ -1,0 +1,36 @@
+name: Build and Package Web Application
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'my-web-app/**'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: actions/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: actions/docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Container Image
+        uses: actions/docker/build-push-action@v5
+        with:
+          context: ./my-web-app
+          push: true
+          tags: |
+          ghcr.io/${{ github.repository }}/my-web-app:latest
+          ghcr.io/${{ github.repository }}/my-web-app:${{ github.sha }}
+          tags: |
+            ghcr.io/${{ github.repository }}/my-web-app:latest
+            ghcr.io/${{ github.repository }}/my-web-app:${{ github.sha }}
