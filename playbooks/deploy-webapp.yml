@@ -1,0 +1,18 @@
+# On ansible-vm3, create /etc/ansible/playbooks/deploy-webapp.yml
+---
+- name: Deploy web application to K3s
+  hosts: loadbalancer
+  become: yes
+  tasks:
+    - name: Copy deployment manifest
+      copy:
+        src: /etc/ansible/my-web-app/deployment.yaml
+        dest: /home/ansible/k3s-deployment/deployment.yaml
+    
+    - name: Apply Kubernetes manifest
+      command: kubectl apply -f /home/ansible/k3s-deployment/deployment.yaml
+      register: result
+    
+    - name: Show deployment status
+      debug:
+        msg: "{{ result.stdout }}"
