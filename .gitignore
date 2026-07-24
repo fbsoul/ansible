@@ -1,4 +1,4 @@
-*.retry
+# Secrets and sensitive data
 playbooks/vscode.rpm
 hosts.old
 ignorefile
@@ -6,7 +6,39 @@ installationdir
 .env
 ignorefile
 ignorefile
+*.crt
+*.p12
+secrets.yml
+vault.yml
+*.secret
 installationdir
 *.pem
 *.key
+
+
+#ansible temporary files
+*.retry
+*.tmp
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Personal files
+*.swp
+*.swo
+*~
+
+# SSH keys
+.ssh/
 id_rsa
+id_rsa.pub
+
+# python cache
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+venv/
