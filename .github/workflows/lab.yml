@@ -1,29 +1,43 @@
-name: Runner Test
+name: Runner Lab
 
 on:
   workflow_dispatch:
 
 jobs:
-  test-runner:
-    runs-on: self-hosted
+  runner-test:
+    name: Test Self-Hosted Runner
+    runs-on:
+      - self-hosted
+      - Linux
+      - X64
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show system information
+      - name: Display system information
         run: |
-          echo "Hostname: $(hostname)"
-          echo "User: $(whoami)"
-          echo "Working directory: $(pwd)"
-          echo "Kernel:"
-          uname -a
+          echo "================================="
+          echo "GitHub Actions Runner Information"
+          echo "================================="
+          echo "Hostname : $(hostname)"
+          echo "User     : $(whoami)"
+          echo "Date     : $(date)"
+          echo "Kernel   : $(uname -r)"
+          echo "Directory: $(pwd)"
           echo
-          echo "Git version:"
-          git --version
-          echo
-          echo "Ansible:"
-          ansible --version
-          echo
-          echo "Kubectl:"
-          kubectl version --client
+
+      - name: Verify Git
+        run: git --version
+
+      - name: Verify Ansible
+        run: ansible --version
+
+      - name: Verify kubectl
+        run: kubectl version --client
+
+      - name: Verify Docker
+        run: docker --version
+
+      - name: Verify K3s
+        run: kubectl get nodes
