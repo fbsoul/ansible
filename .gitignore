@@ -2,10 +2,7 @@
 playbooks/vscode.rpm
 hosts.old
 ignorefile
-installationdir
 .env
-ignorefile
-ignorefile
 *.crt
 *.p12
 secrets.yml
@@ -42,3 +39,13 @@ __pycache__/
 # Environment files
 .env
 venv/
+
+# GitHub Actions self-hosted runner
+actions-runner/
+
+# Kubernetes local configuration
+.kube/
+
+# Project environment (machine-specific)
+# Uncomment if you don't want to share it
+.env.project
