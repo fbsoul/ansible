@@ -36,9 +36,6 @@ jobs:
       - name: Verify kubectl
         run: kubectl version --client
 
-      - name: Verify Docker
-        run: docker --version
-
       - name: Show PATH
         run: |
           echo "PATH=$PATH"
