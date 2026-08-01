@@ -39,5 +39,15 @@ jobs:
       - name: Verify Docker
         run: docker --version
 
+      - name: Show PATH
+        run: |
+          echo "PATH=$PATH"
+
+      - name: Locate important tools
+        run: |
+          which git
+          which ansible
+          which kubectl
+
       - name: Verify K3s
         run: kubectl get nodes
