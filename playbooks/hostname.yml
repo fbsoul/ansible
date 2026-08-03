@@ -1,8 +1,10 @@
 ---
 
-- hosts:  nodes
-  
+- hosts: all_vms
+  become: true
   tasks:
+  
   - name: get nodes hostnames
-    command: hostname
-    
+    command: hostname 
+    changed_when: false
+
