@@ -1,0 +1,36 @@
+name: Run Ansible Ping Playbook
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ping-hosts:
+
+    runs-on: self-hosted
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show PATH
+        run: |
+          echo "$PATH"
+
+      - name: Verify important tools
+        run: |
+          which git
+          which ansible
+          which ansible-playbook
+          which kubectl
+
+      - name: Show inventory
+        run: |
+          cat hosts
+
+      - name: Run ping playbook
+        run: |
+        
+          ansible-playbook \
+            -i hosts \
+            playbooks/ping_playbook.yml
