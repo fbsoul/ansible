@@ -1,4 +1,4 @@
-name: Run system update Playbook
+name: Run systems update Playbook
 
 on:
   workflow_dispatch:

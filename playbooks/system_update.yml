@@ -1,0 +1,32 @@
+---
+- name: Update Linux packages
+  hosts: all_vms
+  become: true
+  gather_facts: true
+
+  tasks:
+
+    - name: Upgrade all packages
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+        update_only: true
+
+    - name: Show OS version
+      debug:
+         msg:
+           - "Host: {{ inventory_hostname }}"
+           - "Distribution: {{ ansible_distribution }}"
+           - "Version: {{ ansible_distribution_version }}"
+
+    - name: Check if reboot is recommended
+      ansible.builtin.command: needs-restarting -r
+      register: reboot_check
+      changed_when: false
+      failed_when: false
+
+    - name: Display reboot status
+      ansible.builtin.debug:
+        msg: >
+          {{ inventory_hostname }}
+          reboot required = {{ reboot_check.rc != 0 }}
