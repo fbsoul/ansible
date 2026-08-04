@@ -1,0 +1,37 @@
+name: Run system update Playbook
+
+on:
+  workflow_dispatch:
+
+jobs:
+  system_update:
+
+    runs-on: self-hosted
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show PATH
+        run: |
+          echo "$PATH"
+
+      - name: Verify important tools
+        run: |
+          which git
+          which ansible
+          which ansible-playbook
+          which kubectl
+
+      - name: Show inventory
+        run: |
+          cat hosts
+
+      - name: Run hostname playbook
+        run: |
+        
+          ansible-playbook \
+            -i hosts \
+            playbooks/system_update \
+            -v
