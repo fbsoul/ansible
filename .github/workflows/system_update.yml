@@ -33,5 +33,5 @@ jobs:
         
           ansible-playbook \
             -i hosts \
-            playbooks/system_update \
+            playbooks/system_update.yml \
             -v
