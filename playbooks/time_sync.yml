@@ -1,0 +1,34 @@
+---
+- name: Ensure time synchronization across all VMs
+  hosts: all_vms
+
+  tasks:
+
+    - name: Enable NTP sync
+      command: timedatectl set-ntp true
+      become: true
+      register: ntp_result
+      changed_when: "'already' not in ntp_result.stdout"
+  
+    - name: Force sync time
+      command: chronyc -a makestep
+      become: true
+      register: chrony_result
+      changed_when: "'stepped' in chrony_result.stdout"
+      failed_when: chrony_result.rc not in [0, 1, 2]
+
+    - name: Set timezone to Asia/Amman
+      command: timedatectl set-timezone Asia/Amman
+      become: true
+      register: timezone_result
+      changed_when: timezone_result.stdout != ""
+      when: ansible_os_family == "Linux"
+
+    - name: Verify synchronization
+      command: timedatectl status
+      register: time_status
+      changed_when: false
+
+    - name: Display time status
+      debug:
+        msg: "Time sync status: {{ time_status.stdout }}"
