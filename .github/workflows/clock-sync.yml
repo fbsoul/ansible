@@ -1,15 +1,13 @@
-name: Run systems time clock sync Playbook
+name:  clock sync Playbook
 
 on:
   workflow_dispatch:
 
 jobs:
-    time_sync:
-
+  time_sync:
     runs-on: self-hosted
-
+      
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -30,8 +28,7 @@ jobs:
 
       - name: Run time clock sync playbook
         run: |
-        
           ansible-playbook \
             -i hosts \
-            playbooks/time_sync.yml \
+            playbooks/clock-sync.yml \
             -v
